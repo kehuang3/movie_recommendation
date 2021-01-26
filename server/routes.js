@@ -80,7 +80,22 @@ function getDecades(req, res) {
 
 /* ---- Q3 (Best Genres) ---- */
 function bestGenresPerDecade(req, res) {
+  const targetDecade = req.params.decade;  
+  var query = `
+    with
+      tmp0 as (SELECT id, (FLOOR(release_year/10)*10) AS decade, rating FROM Movies where (FLOOR(release_year/10)*10) = ${targetDecade}),
+      tmp1 as (select id, rating, genre from tmp0 left join Genres g on tmp0.id = g.movie_id order by genre),
+      tmp2 as (select distinct genre from Genres order by genre),
+      tmp3 as (select tmp2.genre, rating from tmp2 left join tmp1 on tmp2.genre = tmp1.genre)
 
+    select genre, ifnull(avg(rating),0) as avg_rating from tmp3 group by genre order by avg_rating desc, genre;
+  `;
+  connection.query(query, function(err, rows, fields) {
+    if (err) console.log(err);
+    else {
+      res.json(rows);
+    }
+  });
 };
 
 // The exported functions, which can be accessed in index.js.

@@ -20,7 +20,31 @@ export default class BestGenre extends React.Component {
 
 	/* ---- Q3a (Best Genres) ---- */
 	componentDidMount() {
-	
+		// Send an HTTP request to the server.
+		fetch("http://localhost:8081/decades",
+		{
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		// Convert the response data to a JSON.
+		return res.json();
+		}, err => {
+		// Print the error if there is one.
+		console.log(err);
+		}).then(decadeList => {
+		if (!decadeList) return;
+		// Map each decadeObj in decadeList to an HTML element:
+		// A button which triggers the showMovies function for each genre.
+		let decadeDivs = decadeList.map((decadeObj, i) =>
+		<option value={decadeObj.decade}>{decadeObj.decade}</option> 
+		);
+		// Set the state of the genres list to the value returned by the HTTP response from the server.
+		this.setState({
+			decades: decadeDivs,
+		});
+		}, err => {
+		// Print the error if there is one.
+		console.log(err);
+		});	
 	}
 
 	handleChange(e) {
@@ -31,7 +55,32 @@ export default class BestGenre extends React.Component {
 
 	/* ---- Q3b (Best Genres) ---- */
 	submitDecade() {
-		
+		// Send an HTTP request to the server.
+		const decade = this.state.selectedDecade;
+		fetch(`http://localhost:8081/decades/${decade}`,
+		{
+		method: 'GET' // The type of HTTP request.
+		}).then(res => {
+		// Convert the response data to a JSON.
+		return res.json();
+		}, err => {
+		// Print the error if there is one.
+		console.log(err);
+		}).then(bestGenreList => {
+		if (!bestGenreList) return;
+		// Map each decadeObj in decadeList to an HTML element:
+		// A button which triggers the showMovies function for each genre.
+		let bestGenreDivs = bestGenreList.map((bestGenreObj, i) =>
+		<BestGenreRow key={i} bestGenres={bestGenreObj} /> 
+		);
+		// Set the state of the genres list to the value returned by the HTTP response from the server.
+		this.setState({
+			genres: bestGenreDivs,
+		});
+		}, err => {
+		// Print the error if there is one.
+		console.log(err);
+		});		
 	}
 
 	render() {

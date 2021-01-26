@@ -52,7 +52,7 @@ app.get('/decades', routes.getDecades);
 
 
 /* ---- Q3b (Best Genre) ---- */
-
+app.get('/decades/:decade', routes.bestGenresPerDecade);
 
 
 

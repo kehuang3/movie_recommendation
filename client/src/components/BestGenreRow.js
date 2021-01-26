@@ -9,8 +9,8 @@ export default class BestGenreRow extends React.Component {
 	render() {
 		return (
 			<div className="movieResults">
-				<div className="genre">GENRE</div>
-				<div className="rating">AVERAGE RATING</div>
+				<div className="genre">{this.props.bestGenres.genre}</div>
+				<div className="rating">{this.props.bestGenres.avg_rating}</div>
 			</div>
 		);
 	}
